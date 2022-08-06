@@ -24,8 +24,8 @@ root.title("Patient Visit Logs")
 root.geometry("1000x800")
 
 # define functions to be used in button commands
-# add new patient data to treeview list
 def add_patient():
+    """Add new patient data to treeview list."""
     # double check that all fields have an input
     boolean = entry_confirm()
     # if there are missing entries, then do not continue
@@ -38,8 +38,8 @@ def add_patient():
     # load latest data from database
     load_data()
 
-# remove existing patient data from treeview list
 def remove_patient():
+    """Remove patient from treeview list."""
     if entryPatientNumber.get()=='':
         messagebox.showinfo('Warning', "Please select a record to delete.")
         return
@@ -50,8 +50,8 @@ def remove_patient():
     # load latest data from database
     load_data()
 
-# update existing patient data from treeview list
 def update_patient():
+    """Update patient information from treeview list."""
     # double check that all required fields have an input
     boolean = entry_confirm()
     # if there are missing entries, then do not continue
@@ -64,8 +64,8 @@ def update_patient():
     # load latest data from database
     load_data()
 
-# clear the entry boxes
 def clear_patient():
+    """Clear all entry boxes and clear selected treeview on the bottom of application."""
     entryPatientNumber.delete(0, END)
     entryDateOfVisit.delete(0, END)
     entryFirstName.delete(0, END)
@@ -77,9 +77,8 @@ def clear_patient():
     for row in selectedTreeview.get_children():
         selectedTreeview.delete(row)
 
-# clear the treeview and load the latest database
 def load_data():
-    # delete all rows in the treeview
+    """Clear the treeview and fetch the latest data from the database."""
     for row in appTreeview.get_children():
         appTreeview.delete(row)
     # load each row column by column into the treeview
@@ -94,27 +93,27 @@ def load_data():
         # '' is the parent to be master, 'end' is the index, text, values
         appTreeview.insert('','end',text=PatientNo, value=(PatientNo, DateOfVisit, FirstName, LastName, Birthday, PhoneNo, Complaint))
 
-# close out the program
 def exit_program():
+    """Exits program."""
     box = messagebox.askquestion('Exit', 'Do you want to exit the program?', icon='warning')
     if box =='yes':
         # closes the program
         root.destroy()
 
-# check if all entry fields required have inputs, if not, show display box to notify user information that needs to be added.
 def entry_confirm():
+    """Confirms that entry boxes has valid inputs."""
     # if entry box is blank, show warning and return False
-    if entryPatientNumber.get() =='':
-        messagebox.showinfo('Warning', "Please enter a patient number.")
+    if entryPatientNumber.get() =='' or entryPatientNumber.get().isnumeric == False:
+        messagebox.showinfo('Warning', "Please enter a valid patient number.")
         return False
     if entryDateOfVisit.get()=='':
         messagebox.showinfo('Warning', "Please enter a date of visit.")
         return False
-    if entryFirstName.get()=='':
-        messagebox.showinfo('Warning', "Please enter a first name.")
+    if entryFirstName.get()=='' or entryFirstName.get().isalpha == False:
+        messagebox.showinfo('Warning', "Please enter a valid first name.")
         return False
-    if entryLastName.get()=='':
-        messagebox.showinfo('Warning', "Please enter a last name.")
+    if entryLastName.get()=='' or entryLastName.get().isalpha == False:
+        messagebox.showinfo('Warning', "Please enter a valid last name.")
         return False
     if entryBirthday.get()=='':
         messagebox.showinfo('Warning', "Please enter a birthday.")
@@ -126,8 +125,8 @@ def entry_confirm():
         messagebox.showinfo('Warning', "Please enter a complaint or reason for visit.")
         return False
 
-# when a patient log is selected, each item in the row is shown on the entry boxes and on the selected treeview on the bottom.
-def selection_event(self):
+def selection_event():
+    """Show selected patient on bottom treeview."""
     # clear treeview
     clear_patient()
     # repopulate treeview and show selected items in entry boxes
